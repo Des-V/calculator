@@ -11,16 +11,16 @@ bn = {'size': (10, 1), 'button_color': (
 
 # Define the window's contents
 layout = [
-    [sg.Text('', key='DISPLAY', size=(24, 1), font=('Digital 7', 20),
-             background_color='black', text_color='white',)],
+    [sg.Text('', key='-DISPLAY-', size=(24, 1), font=('Digital 7', 20),
+             justification='right', background_color='black', text_color='white',)],
     [sg.Button(button_text='AC', key='-AC-', **bt),
      sg.Button(button_text='C', key='-C-', **bt),
      sg.Button(button_text='%', key='-PERCENTAGE-', **bo),
-     sg.Button(button_text='÷', key='-DIVIDE-', **bo)],
+     sg.Button(button_text='/', key='-DIVIDE-', **bo)],
     [sg.Button(button_text='7', key='-NUM-', **bn),
      sg.Button(button_text='8', key='-NUM-', **bn),
      sg.Button(button_text='9', key='-NUM-', **bn),
-     sg.Button(button_text='x', key='-MULTIPLY-', **bo)],
+     sg.Button(button_text='*', key='-MULTIPLY-', **bo)],
     [sg.Button(button_text='4', key='-NUM-', **bn),
      sg.Button(button_text='5', key='-NUM-', **bn),
      sg.Button(button_text='6', key='-NUM-', **bn),
@@ -41,22 +41,40 @@ layout = [
 window = sg.Window('Calculator', layout,
                    return_keyboard_events=True, finalize=True)
 
+# Update_display function format string input and update the window['-DISPLAY-'] in the layout
+
+
+def update_display(val):
+    window['-DISPLAY-'].update(value='{:,.4f}'.format(val))
+
+
 display = ''  # Store the inputed values from buttons
 
 while True:
 
     event, values = window.read()
+    print(event)  # Log the event
+
     # Check if user wants to quit by closing window
-    if event == sg.WINDOW_CLOSED:
+    if event == sg.WINDOW_CLOSED or event == None:
         break
 
-    elif event in '0123456789':
-        display = values['-DISPLAY-']
+    # Check if event happened in the following buttons
+    if event in ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '+', '-', '/', '*']:
+        print('B' + ' ' + event)
         display += event
-        window.FindElement('DISPLAY').update(display)
+        if event not in ['+', '-', '/', '*']:
+            update_display(int(event))
+
+    elif event == '=':
+        display = eval(display)
+        update_display(display)
+
+    elif event == 'AC':
+        display = ''
 
 # Finalize
 window.close()
 
-
+exit()
 # %%
