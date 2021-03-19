@@ -13,26 +13,26 @@ bn = {'size': (10, 1), 'button_color': (
 layout = [
     [sg.Text('', key='-DISPLAY-', size=(24, 1), font=('Digital 7', 20),
              justification='right', background_color='black', text_color='white',)],
-    [sg.Button(button_text='AC', key='-AC-', **bt),
-     sg.Button(button_text='C', key='-C-', **bt),
-     sg.Button(button_text='%', key='-PERCENTAGE-', **bo),
-     sg.Button(button_text='/', key='-DIVIDE-', **bo)],
-    [sg.Button(button_text='7', key='-NUM-', **bn),
-     sg.Button(button_text='8', key='-NUM-', **bn),
-     sg.Button(button_text='9', key='-NUM-', **bn),
-     sg.Button(button_text='*', key='-MULTIPLY-', **bo)],
-    [sg.Button(button_text='4', key='-NUM-', **bn),
-     sg.Button(button_text='5', key='-NUM-', **bn),
-     sg.Button(button_text='6', key='-NUM-', **bn),
-     sg.Button(button_text='-', key='-DIFFERENCE-', **bo)],
-    [sg.Button(button_text='1', key='-NUM-', **bn),
-     sg.Button(button_text='2', key='-NUM-', **bn),
-     sg.Button(button_text='3', key='-NUM-', **bn),
-     sg.Button(button_text='+', key='-SUM-', **bo)],
-    [sg.Button(button_text='0', key='-NUM-', **bn),
-     sg.Button(button_text='.', key='-DOT-', **bo),
-     sg.Button(button_text='=', key='-EQUAL-', **bt),
-     sg.Button(button_text='±', key='-±-', **bo)],
+    [sg.Button('AC', **bt),
+     sg.Button('C', **bt),
+     sg.Button('%', **bo),
+     sg.Button('/', **bo)],
+    [sg.Button('7', **bn),
+     sg.Button('8', **bn),
+     sg.Button('9', **bn),
+     sg.Button('*', **bo)],
+    [sg.Button('4', **bn),
+     sg.Button('5', **bn),
+     sg.Button('6', **bn),
+     sg.Button('-', **bo)],
+    [sg.Button('1', **bn),
+     sg.Button('2', **bn),
+     sg.Button('3', **bn),
+     sg.Button('+', **bo)],
+    [sg.Button('0', **bn),
+     sg.Button('.', **bo),
+     sg.Button('=', **bt),
+     sg.Button('±', **bo)],
 ]
 
 
@@ -42,10 +42,6 @@ window = sg.Window('Calculator', layout,
                    return_keyboard_events=True, finalize=True)
 
 # Update_display function format string input and update the window['-DISPLAY-'] in the layout
-
-
-def update_display(val):
-    window['-DISPLAY-'].update(value='{:,.4f}'.format(val))
 
 
 display = ''  # Store the inputed values from buttons
@@ -61,17 +57,17 @@ while True:
 
     # Check if event happened in the following buttons
     if event in ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '+', '-', '/', '*']:
-        print('B' + ' ' + event)
         display += event
         if event not in ['+', '-', '/', '*']:
-            update_display(int(event))
+            window['-DISPLAY-'].update(event)
 
     elif event == '=':
         display = eval(display)
-        update_display(display)
+        window['-DISPLAY-'].update(display)
 
     elif event == 'AC':
-        display = ''
+        display = 0
+        window['-DISPLAY-'].update(display)
 
 # Finalize
 window.close()
